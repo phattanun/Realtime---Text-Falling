@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>Letters Falling</title>
+	<title>Letters Fall & Collision Simulation</title>
 
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<script type="text/javascript" src="js/three.min.js"></script>
@@ -16,8 +16,7 @@
 	'use strict';
 	Physijs.scripts.worker = 'js/physijs_worker.js';
 	var initScene, render, _boxes = [], spawnBox1,spawnBox2 ,spawnBox3, loader,
-
-			renderer, render_stats, physics_stats, scene, ground_material, ground, light, camera;
+		renderer, render_stats, physics_stats, scene, ground_material, ground, light, camera;
 
 	initScene = function() {
 		renderer = new THREE.WebGLRenderer({ antialias: true });
