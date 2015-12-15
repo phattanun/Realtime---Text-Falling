@@ -431,7 +431,6 @@
 	<!------------ฟังชันก์ประมวลผลเพื่อสร้างภาพเคลื่อนไหวอย่างต่อเนื่อง----------------->
 	render = function() {
 		requestAnimationFrame( render );
-		position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
 		cloud.position.z+=0.5;
 		renderer.render( scene, camera );
 	};
