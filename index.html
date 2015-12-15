@@ -19,6 +19,9 @@
 	var initScene, render, _boxes = [], spawnText1,spawnText2 ,spawnText3, loader,hemiLight,
 		renderer, scene, ground_material, ground, light, camera;
 
+	var global ={
+		gravity:20
+	}
 	var pohfyDetail = {
 		R: 1.6,
 		G:0.01,
@@ -66,6 +69,10 @@
 			bank.addColor(bankDetail,'colour');
 			bank.addColor(bankDetail,'specular');
 			bank.add(bankDetail,'shininess');
+		var controller = gui.add(global, 'gravity',0,2000);
+		controller.onChange(function(value) {
+			scene.setGravity(new THREE.Vector3( 0,-value , 0 ));
+		});
 
 	};
 	THREE.ShaderTypes = {
@@ -155,7 +162,7 @@
 		scene = new Physijs.Scene;
 		scene.fog = new THREE.Fog( 0xffffff, 1, 5000 );
 		scene.fog.color.setHSL( 0.6, 0, 1 );
-		scene.setGravity(new THREE.Vector3( 0, -20, 0 ));
+		scene.setGravity(new THREE.Vector3( 0, -global.gravity, 0 ));
 		scene.addEventListener(
 				'update',
 				function() {
@@ -171,12 +178,12 @@
 		light.position.set( 20, 40, -15 );
 		light.target.position.copy( scene.position );
 		light.castShadow = true;
-		light.shadowCameraLeft = -60;
-		light.shadowCameraTop = -60;
-		light.shadowCameraRight = 60;
-		light.shadowCameraBottom = 60;
-		light.shadowCameraNear = 20;
-		light.shadowCameraFar = 200;
+		light.shadowCameraLeft = -600;
+		light.shadowCameraTop = -600;
+		light.shadowCameraRight = 600;
+		light.shadowCameraBottom = 600;
+		light.shadowCameraNear = 2;
+		light.shadowCameraFar = 2000;
 		light.shadowBias = -.0001;
 		light.shadowMapWidth = light.shadowMapHeight = 2048;
 		light.shadowDarkness = .7;
@@ -219,6 +226,7 @@
 		ground.rotation.x = -Math.PI/2;
 		ground.position.y = -33;
 		ground.receiveShadow = true;
+
 		scene.add( ground );
 
 
