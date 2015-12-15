@@ -111,14 +111,6 @@
 				}
 		);
 
-		camera = new THREE.PerspectiveCamera(
-				35,
-				window.innerWidth / window.innerHeight,
-				1,
-				1000
-		);
-/*		camera.position.set( 60, 50, 60 );
-		camera.lookAt( scene.position );*/
 		camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 5000 );
 		camera.position.set( 0, 0, 250 );
 		scene.add( camera );
@@ -164,9 +156,6 @@
 		scene.add( sky );
 
 		// Ground
-
-
-		var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
 		var groundMat = Physijs.createMaterial(
 				new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } ),
 				.8,
@@ -179,25 +168,6 @@
 		ground.position.y = -33;
 		ground.receiveShadow = true;
 		scene.add( ground );
-
-
-
-/*		ground_material = Physijs.createMaterial(
-				new THREE.MeshLambertMaterial({ map: loader.load( 'images/water.jpg' ) }),
-				.8, // high friction
-				.3 // low restitution
-		);
-		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		ground_material.map.repeat.set( 3, 3 );
-
-		ground = new Physijs.BoxMesh(
-				new THREE.BoxGeometry(100, 1, 100),
-				ground_material,
-				0 // mass
-		);
-		ground.receiveShadow = true;
-		scene.add( ground );*/
-
 
 
 		spawnBox1();
