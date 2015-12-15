@@ -16,7 +16,7 @@
 
 	'use strict';
 	Physijs.scripts.worker = 'js/physijs_worker.js';
-	var initScene, render, _boxes = [], spawnBox1,spawnBox2 ,spawnBox3, loader,hemiLight,
+	var initScene, render, _boxes = [], spawnText1,spawnText2 ,spawnText3, loader,hemiLight,
 		renderer, scene, ground_material, ground, light, camera;
 
 	var pohfyDetail = {
@@ -222,9 +222,9 @@
 		scene.add( ground );
 
 
-		spawnBox1();
-		spawnBox2();
-		spawnBox3();
+		spawnText1();
+		spawnText2();
+		spawnText3();
 		datt();
 		requestAnimationFrame( render );
 		scene.simulate();
@@ -248,7 +248,7 @@
 
 	}
 
-	spawnBox1 = (function() {
+	spawnText1 = (function() {
 
 
 
@@ -287,7 +287,7 @@
 					);
 
 					box.castShadow = true;
-					box.addEventListener( 'ready', spawnBox1 );
+					box.addEventListener( 'ready', spawnText1 );
 					scene.add( box );
 				};
 
@@ -295,7 +295,7 @@
 			setTimeout( createBox, 1000 );
 		};
 	})();
-	spawnBox2 = (function() {
+	spawnText2 = (function() {
 		var text = new  THREE.TextGeometry( "เวศวรุศ", {
 					font: 'db helvethaicamon x 75 bd',
 					size: 10,
@@ -339,7 +339,7 @@
 					);
 
 					box.castShadow = true;
-					box.addEventListener( 'ready', spawnBox2 );
+					box.addEventListener( 'ready', spawnText2 );
 					scene.add( box );
 				};
 
@@ -347,7 +347,7 @@
 			setTimeout( createBox, 1000 );
 		};
 	})();
-	spawnBox3 = (function() {
+	spawnText3 = (function() {
 		var text = new  THREE.TextGeometry( "พัทธนันท์", {
 					font: 'db helvethaicamon x 75 bd',
 					size: 10,
@@ -384,7 +384,7 @@
 					);
 
 					box.castShadow = true;
-					box.addEventListener( 'ready', spawnBox3 );
+					box.addEventListener( 'ready', spawnText3 );
 					scene.add( box );
 				};
 
