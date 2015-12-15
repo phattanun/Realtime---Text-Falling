@@ -117,8 +117,10 @@
 				1,
 				1000
 		);
-		camera.position.set( 60, 50, 60 );
-		camera.lookAt( scene.position );
+/*		camera.position.set( 60, 50, 60 );
+		camera.lookAt( scene.position );*/
+		camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 5000 );
+		camera.position.set( 0, 0, 250 );
 		scene.add( camera );
 		// Light
 		light = new THREE.DirectionalLight( 0xFFFFFF );
@@ -155,7 +157,7 @@
 		uniforms.topColor.value.copy( hemiLight.color );
 
 		scene.fog.color.copy( uniforms.bottomColor.value );
-		var skyGeo = new THREE.SphereGeometry( 125, 32, 15 );
+		var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
 		var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
 
 		var sky = 	new THREE.Mesh( skyGeo, skyMat );
@@ -164,23 +166,23 @@
 		// Ground
 
 
-//		var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
-//		var groundMat = Physijs.createMaterial(
-//				new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } ),
-//				.8,
-//				.3
-//		);
-//		groundMat.color.setHSL( 0.095, 1, 0.75 );
-//
-//		var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(1000, 1000, 1),groundMat,0);
-//		ground.rotation.x = -Math.PI/2;
-//		ground.position.y = -33;
-//		ground.receiveShadow = true;
-//		scene.add( ground );
+		var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
+		var groundMat = Physijs.createMaterial(
+				new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } ),
+				.8,
+				.3
+		);
+		groundMat.color.setHSL( 0.095, 1, 0.75 );
+
+		var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(10000, 10000, 1),groundMat,0);
+		ground.rotation.x = -Math.PI/2;
+		ground.position.y = -33;
+		ground.receiveShadow = true;
+		scene.add( ground );
 
 
 
-		ground_material = Physijs.createMaterial(
+/*		ground_material = Physijs.createMaterial(
 				new THREE.MeshLambertMaterial({ map: loader.load( 'images/water.jpg' ) }),
 				.8, // high friction
 				.3 // low restitution
@@ -194,7 +196,7 @@
 				0 // mass
 		);
 		ground.receiveShadow = true;
-		scene.add( ground );
+		scene.add( ground );*/
 
 
 
@@ -228,8 +230,8 @@
 	spawnBox1 = (function() {
 		var text = new  THREE.TextGeometry( "กรชนก", {
 					font: 'db helvethaicamon x 75 bd',
-					size: 4,
-					height:2
+					size: 10,
+					height:5
 				}),
 				createBox = function() {
 					var box, material;
@@ -271,8 +273,8 @@
 	spawnBox2 = (function() {
 		var text = new  THREE.TextGeometry( "เวศวรุศ", {
 					font: 'db helvethaicamon x 75 bd',
-					size: 4,
-					height:2
+					size: 10,
+					height:5
 				}),
 				createBox = function() {
 					var box, material;
@@ -323,8 +325,8 @@
 	spawnBox3 = (function() {
 		var text = new  THREE.TextGeometry( "พัทธนันท์", {
 					font: 'db helvethaicamon x 75 bd',
-					size: 4,
-					height:2
+					size: 10,
+					height:5
 				}),
 				createBox = function() {
 					var box, material;
