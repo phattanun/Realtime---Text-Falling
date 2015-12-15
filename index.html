@@ -3,6 +3,7 @@
 <html>
 
 <head>
+<!------ส่วนที่เก็บคำสั่งเพื่อ include libraries ต่างๆ---------------------------------------------------------------------------->
 	<title>3D Letters Drop & Collision Simulation</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<script type="text/javascript" src="js/three.min.js"></script>
@@ -12,13 +13,14 @@
 	<script type="text/javascript" src="js/DB%20HelvethaicaMon%20X%2075%20Bd_75%20Bd.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
 	<script type="text/javascript" src="js/dat.js"></script>
+
+<!------ส่วน script ของโปรแกรมหลัก ใช้สร้างวัตถุสามมิติทั้งหมด และทำการเคลื่อนไหววัตถุเหล่านั้น------------------------------------------>
 	<script type="text/javascript">
-
 	'use strict';
+	<!------------ส่วนของตัวแปร Global Variable-------------------->
 	Physijs.scripts.worker = 'js/physijs_worker.js';
-	var initScene, render, _boxes = [], spawnText1,spawnText2 ,spawnText3, loader,hemiLight,mesh,
+	var initScene, render, _boxes = [], spawnText1,spawnText2 ,spawnText3, loader,hemiLight,cloud,
 		renderer, scene, ground_material, ground, light, camera, position,start_time = Date.now();
-
 	var global ={
 		gravity:20
 	}
@@ -45,6 +47,7 @@
 		shininess:51.0
 	};
 
+	<!------------ฟังชันก์ที่ใช้สร้าง Control Panel-------------------->
 	var datt = function() {
 		var gui = new dat.GUI();
 		var poh = gui.addFolder('กรชนก');
@@ -150,9 +153,7 @@
 
 	};
 
-
-
-
+	<!------------ฟังชันก์เริ่มต้นที่ใช้สร้างฉาก พื้น แสง กล้อง และเมฆ รวมถึงเรียกฟังก์ชันเพื่อสร้างตัวอักษร-------------------->
 	initScene = function() {
 		renderer = new THREE.WebGLRenderer({ antialias: true });
 		renderer.setSize( window.innerWidth, window.innerHeight );
@@ -169,7 +170,6 @@
 					scene.simulate( undefined, 1 );
 				}
 		);
-
 		camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 5000 );
 		camera.position.set( 0, 0, 250 );
 		scene.add( camera );
@@ -195,7 +195,7 @@
 		scene.add( hemiLight );
 		// Loader
 		loader = new THREE.TextureLoader();
-		// SKYDOME
+		// SKY
 		var vertexShader = document.getElementById( 'vertexShader2' ).textContent;
 		var fragmentShader = document.getElementById( 'fragmentShader2' ).textContent;
 		var uniforms = {
@@ -209,7 +209,8 @@
 
 		scene.fog.color.copy( uniforms.bottomColor.value );
 		var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
-		var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+		var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader,
+													uniforms: uniforms, side: THREE.BackSide } );
 
 		var sky = 	new THREE.Mesh( skyGeo, skyMat );
 		scene.add( sky );
@@ -234,29 +235,21 @@
 		var texture = THREE.ImageUtils.loadTexture( 'images/cloud.png', null, render );
 		texture.magFilter = THREE.LinearMipMapLinearFilter;
 		texture.minFilter = THREE.LinearMipMapLinearFilter;
-
 		var fog = new THREE.Fog( 0x4584b4, - 100, 3000 );
-
 		var material = new THREE.ShaderMaterial( {
-
 			uniforms: {
-
 				"map": { type: "t", value: texture },
 				"fogColor" : { type: "c", value: fog.color },
 				"fogNear" : { type: "f", value: fog.near },
 				"fogFar" : { type: "f", value: fog.far },
-
 			},
 			vertexShader: document.getElementById( 'vs' ).textContent,
 			fragmentShader: document.getElementById( 'fs' ).textContent,
 			depthWrite: false,
 			depthTest: false,
 			transparent: true
-
 		} );
-
 		var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
-
 		for ( var i = 0; i < 8000; i++ ) {
 			plane.position.x = Math.random() * 1000 - 500;
 			plane.position.y = - Math.random() * Math.random() * 200 - 15;
@@ -265,12 +258,10 @@
 			plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 			THREE.GeometryUtils.merge( geometry, plane );
 		}
-
-
-		mesh = new THREE.Mesh( geometry, material );
-		mesh.position.z = - 8000;
-		mesh.position.y +=  260;
-		scene.add( mesh );
+		cloud = new THREE.Mesh( geometry, material );
+		cloud.position.z = - 8000;
+		cloud.position.y +=  260;
+		scene.add( cloud );
 
 		spawnText1();
 		spawnText2();
@@ -280,6 +271,7 @@
 		scene.simulate();
 	};
 
+	<!------------ฟังชันก์ที่ใช้สร้าง shader Material -------------------->
 	function createShaderMaterial(id, light) {
 
 		var shader = THREE.ShaderTypes[id];
@@ -298,6 +290,7 @@
 
 	}
 
+	<!------------ฟังชันก์ที่ใช้สร้างตัวอักษร-------------------->
 	spawnText1 = (function() {
 		var text = new  THREE.TextGeometry( 'กรชนก', {
 					font: 'db helvethaicamon x 75 bd',
@@ -404,8 +397,8 @@
 
 					material = Physijs.createMaterial(
 							new THREE.MeshPhongMaterial({ map: loader.load( 'images/bank.jpg' ) , color: bankDetail.colour, specular: bankDetail.specular, shininess: bankDetail.shininess, shading: THREE.FlatShading}),
-							.6, // medium friction
-							.3 // low restitution
+							.6,
+							.3
 					);
 					material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
 					material.map.repeat.set( .1, .1 );
@@ -439,19 +432,21 @@
 		};
 	})();
 
+	<!------------ฟังชันก์ประมวลผลเพื่อสร้างภาพเคลื่อนไหวอย่างต่อเนื่อง----------------->
 	render = function() {
 		requestAnimationFrame( render );
 		position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
-		mesh.position.z+=0.5;
+		cloud.position.z+=0.5;
 		renderer.render( scene, camera );
 	};
 
+	<!------------คำสั่งเรียกฟังชันก์ initScene เป็นฟังก์ชันแรกเมื่อโหลดหน้าเสร็จ----------------->
 	window.onload = initScene;
 
 	</script>
 
 </head>
-
+	<!------------ส่วน body เก็บ viewport ที่ใช้แสดงผล และเก็บ fragment shader และ vertex shader สำหรับใช้ประมวลผล----------------->
 <body>
 		<script id="fragmentShader" type="x-shader/x-fragment">
 			uniform vec3 lightPos;
