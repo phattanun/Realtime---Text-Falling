@@ -4,7 +4,6 @@
 
 <head>
 	<title>3D Letters Drop & Collision Simulation</title>
-
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/TextGeometry.js"></script>
@@ -12,13 +11,63 @@
 	<script type="text/javascript" src="js/harabara.js"></script>
 	<script type="text/javascript" src="js/DB%20HelvethaicaMon%20X%2075%20Bd_75%20Bd.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
+	<script type="text/javascript" src="js/dat.js"></script>
 	<script type="text/javascript">
 
 	'use strict';
 	Physijs.scripts.worker = 'js/physijs_worker.js';
 	var initScene, render, _boxes = [], spawnBox1,spawnBox2 ,spawnBox3, loader,hemiLight,
-		renderer, render_stats, physics_stats, scene, ground_material, ground, light, camera;
+		renderer, scene, ground_material, ground, light, camera;
 
+	var pohfyDetail = {
+		R: 1.6,
+		G:0.01,
+		B:0.62
+	};
+	var roosDetail = {
+		kaR:0.01,
+		kaG:0.07,
+		kaB:0.22,
+		kdR:0.01,
+		kdG:0.49,
+		kdB:1.2,
+		ksR:0.8,
+		ksG:1.0,
+		ksB:0.9,
+		s:30.0
+	};
+	var bankDetail = {
+		colour:0xffffff,
+		specular:0xffffff,
+		shininess:51.0
+	};
+
+	var datt = function() {
+		var gui = new dat.GUI();
+		var poh = gui.addFolder('กรชนก');
+		poh.add(pohfyDetail, 'R', 0, 2)
+		poh.add(pohfyDetail, 'G', 0, 2)
+		poh.add(pohfyDetail, 'B', 0, 2)
+		var roos = gui.addFolder('เวศวรุศ');
+			var roosA=roos.addFolder('Ka');
+			var roosD=roos.addFolder('Kd');
+			var roosS=roos.addFolder('Ks');
+				roosA.add(roosDetail, 'kaR', 0.0, 2.0);
+				roosA.add(roosDetail, 'kaG', 0.0, 2.0);
+				roosA.add(roosDetail, 'kaB', 0.0, 2.0);
+				roosD.add(roosDetail, 'kdR', 0.0, 2.0);
+				roosD.add(roosDetail, 'kdG', 0.0, 2.0);
+				roosD.add(roosDetail, 'kdB', 0.0, 2.0);
+				roosS.add(roosDetail, 'ksR', 0.0, 2.0);
+				roosS.add(roosDetail, 'ksG', 0.0, 2.0);
+				roosS.add(roosDetail, 'ksB', 0.0, 2.0);
+				roos.add(roosDetail,'s');
+		var bank = gui.addFolder('พัทธนันท์');
+			bank.addColor(bankDetail,'colour');
+			bank.addColor(bankDetail,'specular');
+			bank.add(bankDetail,'shininess');
+
+	};
 	THREE.ShaderTypes = {
 
 		'phongDiffuse' : {
@@ -93,6 +142,9 @@
 		}
 
 	};
+
+
+
 
 	initScene = function() {
 		renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -173,7 +225,7 @@
 		spawnBox1();
 		spawnBox2();
 		spawnBox3();
-
+		datt();
 		requestAnimationFrame( render );
 		scene.simulate();
 	};
@@ -196,9 +248,12 @@
 
 	}
 
-
 	spawnBox1 = (function() {
-		var text = new  THREE.TextGeometry( "กรชนก", {
+
+
+
+
+		var text = new  THREE.TextGeometry( 'กรชนก', {
 					font: 'db helvethaicamon x 75 bd',
 					size: 10,
 					height:5
@@ -207,7 +262,7 @@
 					var box, material;
 
 					var materialColor = new THREE.Color();
-					materialColor.setRGB(1.3, 0.0, 0.2);
+					materialColor.setRGB(pohfyDetail.R, pohfyDetail.G, pohfyDetail.B);
 
 					material = createShaderMaterial("phongDiffuse", light);
 					material.uniforms.uMaterialColor.value.copy(materialColor);
@@ -252,10 +307,10 @@
 					var uniforms = {
 						lightPos: { type: "v3", value: new THREE.Vector3( 0.0, 10.0, -1.0 ) },
 						lightCol: { type: "v3", value: new THREE.Vector3( 0.0, 0.9, 0.9 ) },
-						Ka: { type: "v3", value: new THREE.Vector3( 0.1, 0.1, 0.0 ) },
-						Kd: { type: "v3", value: new THREE.Vector3( 1.0, 1.0, 0.0 ) },
-						Ks: { type: "v3", value: new THREE.Vector3( 0.8, 0.8, 0.8 ) },
-						s: { type: "f", value: 30.0 }
+						Ka: { type: "v3", value: new THREE.Vector3( roosDetail.kaR, roosDetail.kaG, roosDetail.kaB ) },
+						Kd: { type: "v3", value: new THREE.Vector3( roosDetail.kdR, roosDetail.kdG, roosDetail.kdB ) },
+						Ks: { type: "v3", value: new THREE.Vector3( roosDetail.ksR, roosDetail.ksG, roosDetail.ksB ) },
+						s: { type: "f", value: roosDetail.s }
 					};
 
 					material = new THREE.ShaderMaterial( {
@@ -302,7 +357,7 @@
 					var box, material;
 
 					material = Physijs.createMaterial(
-							new THREE.MeshPhongMaterial({ map: loader.load( 'images/bank.jpg' ) , color: 0xffffff, specular: 0xffffff, shininess: 51, shading: THREE.FlatShading}),
+							new THREE.MeshPhongMaterial({ map: loader.load( 'images/bank.jpg' ) , color: bankDetail.colour, specular: bankDetail.specular, shininess: bankDetail.shininess, shading: THREE.FlatShading}),
 							.6, // medium friction
 							.3 // low restitution
 					);
